@@ -11,5 +11,5 @@ enablePlugins(SbtPlugin)
 scriptedLaunchOpts ++= Seq("-Dplugin.version=" + version.value)
 scriptedBufferLog := true
 
-githubRepo := "sbt-github"
-githubRepoOwner := "album-mus"
+bintrayOrganization := Some("whitemice")
+bintrayRepository := "maven"
