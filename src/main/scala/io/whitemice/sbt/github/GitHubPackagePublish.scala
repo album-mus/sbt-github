@@ -16,6 +16,7 @@ object GitHubPackagePublish extends AutoPlugin {
   object autoImport {
     lazy val githubUser = taskKey[String]("The user's github username (e.g. melton1968)")
     lazy val githubToken = taskKey[String]("A github access token")
+    lazy val githubWhoAmI = taskKey[String]("The current settings")
     lazy val githubRepo = settingKey[String]("The target repo (e.g. scala-time)")
     lazy val githubRepoOwner = settingKey[String]("The target repo's owner (e.g. album-mus)")
 
@@ -52,6 +53,15 @@ object GitHubPackagePublish extends AutoPlugin {
           log.info(s"github access token set to $token")
           token
       }
+    },
+
+    githubWhoAmI := {
+      val log = streams.value.log
+      val result = s"${githubRepoOwner.value}/${githubRepo.value}"
+      log.info(s"github repo : ${githubRepoOwner.value}/${githubRepo.value}")
+      log.info(s"github user : ${githubUser.value}")
+      log.info(s"github token: ${githubToken.value}")
+      result
     },
 
     githubRepo := "github-repo name goes here (e.g. scala-time)",
