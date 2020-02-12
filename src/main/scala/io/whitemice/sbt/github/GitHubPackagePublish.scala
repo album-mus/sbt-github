@@ -15,12 +15,12 @@ object GitHubPackagePublish extends AutoPlugin {
 
   object autoImport {
     lazy val githubUser = taskKey[String]("The user's github username (e.g. melton1968)")
-    lazy val githubToken = taskKey[String]("The user's github personal access token")
+    lazy val githubToken = taskKey[String]("A github access token")
     lazy val githubRepo = settingKey[String]("The target repo (e.g. scala-time)")
     lazy val githubRepoOwner = settingKey[String]("The target repo's owner (e.g. album-mus)")
-    lazy val githubPublishTo = settingKey[Some[MavenRepository]]("github Maven repo")
-    lazy val githubCredentials = settingKey[String]("github Maven credentials")
 
+    // TODO You have to use ThisBuild / Resolver.githubPackages(...)
+    // -- Is there a way to return something that is in the global scope?
     implicit class GHResolver(val resolver: Resolver.type) extends AnyVal {
       def githubPackages(owner: String, repo: String): MavenRepository =
         s"GitHub Package Registry ($owner/$repo)" at s"https://maven.pkg.github.com/$owner/$repo"
@@ -29,7 +29,7 @@ object GitHubPackagePublish extends AutoPlugin {
 
   import autoImport._
 
-  override lazy val projectSettings = Seq(
+  override lazy val globalSettings = Seq(
     githubUser := {
       val log = streams.value.log
       val user = Try(s"git config github.actor" !!).map(_.trim)
