@@ -30,28 +30,28 @@ object GitHubPackagePublish extends AutoPlugin {
 
   import autoImport._
 
-  override lazy val globalSettings = Seq(
+  override lazy val buildSettings = Seq(
     githubUser := {
-      val log = streams.value.log
       val user = Try(s"git config github.actor" !!).map(_.trim)
       user match {
         case Success(value) => value
         case _ =>
-          val user = sys.env("GITHUB_ACTOR")
-          log.info(s"github user set to $user")
-          user
+          sys.env.get("GITHUB_ACTOR") match {
+            case Some(value) => value
+            case _ => "NO-USER-FOUND"
+          }
       }
     },
 
     githubToken := {
-      val log = streams.value.log
       val token = Try(s"git config github.packageToken" !!).map(_.trim)
       token match {
         case Success(value) => value
         case _ =>
-          val token = sys.env("GITHUB_TOKEN")
-          log.info(s"github access token set to $token")
-          token
+          sys.env.get("GITHUB_TOKEN") match {
+            case Some(value) => value
+            case _ => "NO-TOKEN-FOUND"
+          }
       }
     },
 
@@ -64,8 +64,8 @@ object GitHubPackagePublish extends AutoPlugin {
       result
     },
 
-    githubRepo := "github-repo name goes here (e.g. scala-time)",
-    githubRepoOwner := "github-repo owner goes here (e.g. album-mus)",
+    githubRepo := "<REPO>",
+    githubRepoOwner := "<OWNER>",
 
     publishTo := Some("GitHub Package Registry" at
       s"https://maven.pkg.github.com/${githubRepoOwner.value}/${githubRepo.value}"),

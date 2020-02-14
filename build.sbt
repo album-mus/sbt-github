@@ -1,6 +1,6 @@
 
 name := "sbt-github"
-version := "0.3"
+version := "0.6"
 organization := "io.whitemice"
 scalaVersion := "2.12.10"
 
